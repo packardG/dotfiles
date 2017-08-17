@@ -4,9 +4,9 @@
 
 # Main ssh func, copies over dot files.
 function pssh() {
-    scp -qr ~/.packard_dotfiles $1:~/
-    scp -q ~/.vimrc_gpackard $1:~/.vimrc_gpackard
-    ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/.bashrc"
+    ssh $1 "mkdir ~/.packard_dotfiles 2>/dev/null"
+    scp -qr ~/.packard_dotfiles/[!.]* $1:~/.packard_dotfiles/
+    ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/bashrc"
 }
 
 # Helpful installer function for vertica
