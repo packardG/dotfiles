@@ -1,0 +1,136 @@
+######################################################
+# Vertica Functions
+######################################################
+
+# Main ssh func, copies over dot files.
+function pssh() {
+    scp -qr ~/.packard_dotfiles $1:~/
+    scp -q ~/.vimrc_gpackard $1:~/.vimrc_gpackard
+    ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/.bashrc"
+}
+
+# Helpful installer function for vertica
+function install_rpm() {
+  /scratch_b/qa/vertica/QA/VT_Scenario/run_qa_scenario --install_vertica -L --rpm_dir="$1" --ignore_install_fail
+}
+
+function pvsql() {
+  is_nimbus=`grep -A5 "$1" /opt/vertica/config/admintools.conf | grep 'is_eon_mode' | awk '{printf $3}'`
+  if [ "$is_nimbus" == False ]; then
+    /opt/vertica/bin/vsql -p `cat /scratch_b/qa/"$1"/port.dat`
+  else
+    /opt/vertica/bin/vsql -p `cat /vertica/data/"$1"/port.dat 2>/dev/null` 2>/dev/null
+    if [ "$?" != 0 ]; then
+        /opt/vertica/bin/vsql -p `cat /scratch_b/qa/"$1"/port.dat`
+    fi
+  fi
+}
+
+# Create 'regular' database
+function pcreate() {
+  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST
+}
+
+# Nimbus create db func.
+function ncreate() {
+  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1"
+}
+
+# Start db
+function pstart() {
+  /opt/vertica/bin/admintools -t start_db -d "$1"
+}
+
+# Stop db
+function pstop() {
+  /opt/vertica/bin/admintools -t stop_db -d "$1"
+}
+
+# Stop && Drop db
+function pdrop() {
+  /opt/vertica/bin/admintools -t stop_db -d "$1"
+  /opt/vertica/bin/admintools -t drop_db -d "$1"
+}
+
+function pwipe() {
+  /opt/vertica/bin/vsql -p`cat /scratch_b/qa/"$1"/port.dat` -f $TOOLS/mhayden/remove_all_tables_views_schemas.sql -d"$1"
+}
+
+# Check if vertica db processes still running on all hosts in cluster
+function dbps() {
+    for host in ${HOSTLIST//,/ }
+    do
+        echo "---------------------------------------------------------------"
+        echo "Host: $host"
+        echo "---------------------------------------------------------------"
+        ssh "$host" "ps -ef | grep $1 | grep vertica | grep -v ssh | grep -v grep"
+    done
+}
+
+# Check disk space on all hosts in cluster.
+# Useful for stress clusters
+function dbdf() {
+    for host in ${HOSTLIST//,/ }
+    do
+        echo "---------------------------------------------------------------"
+        echo "Host: $host"
+        echo "---------------------------------------------------------------"
+        ssh "$host" "df -ah /vertica/data"
+    done
+}
+
+# Function for kicking off stress tests in Nimbus on EC2
+function run_stress() {
+    cd $STRESS_VT
+    nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --shard_count=6 --communal_storage=s3://nimbusdb/gpackard/stress/"$1"/$$ &
+}
+
+######################################################
+# Misc. Functions
+######################################################
+function mkdircd() {
+    mkdir "$1" && cd "$1"
+}
+
+# pstree func.
+function vtree() {
+    pstree -alp $(whoami)
+}
+
+# Why did I put this in here....
+function spongebob() {
+    echo "$@" | tr -d ' ' | sed 's/\(.\)\(.\)/\u\1 \l\2 /g'
+}
+
+######################################################
+# AWS Functions
+######################################################
+
+# Get qa stress bucket tags for easy finger-pointing or deletion
+function get_bucket_tags() {
+    for bucket in `aws s3api list-buckets --query "Buckets[*].Name" | grep qastress | tr -d \",`
+    do
+        tags=$(aws s3api get-bucket-tagging --bucket $bucket --query "TagSet[]" --output text | awk '{printf "{"$1": " $2"}"}')
+        echo $bucket '|' $tags
+    done
+}
+
+# Get all untagged buckets for easy finger-pointing or deletion
+function get_untagged_buckets() {
+    for bucket in `aws s3api list-buckets --query "Buckets[*].Name" | tr -d \",[]`
+    do
+        region=$(aws s3api get-bucket-location --bucket $bucket --output text)
+        # For some reason this returns 'None' for us-east-1. Maybe because it is my default in configure?
+        # Possible this could give different results for other users depending on their configured default region, will have to test
+        if [ "$region" == "None" ];then
+            region=us-east-1
+        fi
+        tags=$(aws s3api get-bucket-tagging --bucket $bucket --region $region --query "TagSet[]" --output text 2>/dev/null | awk '{printf "{"$1": " $2"}"}')
+        echo "$bucket | $tags" | awk 'NF<3' | tr -d '|' >> buckets_$$.txt
+    done
+}
+
+# Get qa list of instances
+function get_ec2_instances() {
+    aws ec2 describe-instances --filters "Name=tag-value,Values=*_auto_*" | jq .Reservations[].Instances[].Tags[].Value | tr -d \"
+}

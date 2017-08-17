@@ -1,0 +1,28 @@
+# All caps names are aliases of directory paths. Useful for abbreviating scps and stuff.
+export VT_SCENARIO="/scratch_b/qa/vertica/QA/VT_Scenario"
+export STRESS_VT="/scratch_b/qa/vertica/QA/Stress_VT"
+export QAREGRES="/scratch_b/qa/vertica/SQLTest/QARegres"
+export QASTRESS="/scratch_b/qa/vertica/SQLTest/QAstress"
+export SQLTEST="/scratch_b/qa/vertica/SQLTest"
+export SCRATCH="/scratch_b/qa"
+export TOOLS="/scratch_b/qa/vertica/QA/tools"
+
+export EMAIL="packard.ben.gilson@hpe.com"
+export MAILTO="packard.ben.gilson@hpe.com"
+
+export SVNROOT=svn+ssh://svn/repos
+
+export r1801="release@engvmqa1801"
+export p1801="gpackard@engvmqa1801"
+export r1805="release@engvmqa1805"
+export p1805="gpackard@engvmqa1805"
+
+# Vertica section (v1)
+export PATH=$PATH:/opt/vertica/bin
+export PATH=$PATH:/home/gpackard/dev_tools
+
+# AWS credentials
+if [ "$USER" != release ]; then
+    export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
+    export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
+fi

@@ -1,0 +1,28 @@
+" Packard Gilson's vimrc, please don't modify!
+
+set nocompatible " Use vim not vi
+syntax on " Color
+colorscheme elflord 
+
+set relativenumber " Show line num relative to current line
+set laststatus=2 " Always show status line
+set showcmd " Show command in status line
+set hlsearch " Highlight all search matches
+set wildmenu " Use <tab> for autocomplete command menu
+set expandtab " Use appropriate num of spaces to insert a tab
+set tabstop=4 " Number of spaces to a <tab>
+set shiftwidth=4 " Number of spaces to use for each step of indent
+set autoindent " Turn on auto indenting
+set showmode " Show what mode we are in (Insert, etc)
+set showmatch " Show matching brackets
+set ruler " Show the line and col num of cursor
+
+" Set cursorline ONLY in active window (useful for split windows)
+augroup CursorLineOnlyInActiveWindow
+    autocmd!
+    autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
+    autocmd WinLeave * setlocal nocursorline
+augroup END
+
+set pastetoggle=<F3>
+set backspace=indent,eol,start
