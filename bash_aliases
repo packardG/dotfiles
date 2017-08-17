@@ -27,4 +27,4 @@ alias fuck='sudo $(history -p \!\!)'
 
 # Env config
 alias vim='vim -u ~/.packard_dotfiles/vimrc_gpackard '
-alias bash='bash --rcfile ~/.packard_dotfiles/.bashrc'
+alias bash='bash --rcfile ~/.packard_dotfiles/bashrc'
