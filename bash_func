@@ -2,7 +2,7 @@
 # Vertica Functions
 ######################################################
 
-# Main ssh func, copies over dot files.
+# Main ssh func, copies over dotfiles.
 function pssh() {
     ssh $1 "mkdir ~/.packard_dotfiles 2>/dev/null"
     scp -qr ~/.packard_dotfiles/[!.]* $1:~/.packard_dotfiles/
@@ -130,7 +130,10 @@ function get_untagged_buckets() {
     done
 }
 
-# Get qa list of instances
+# Get list of running instances
+# All instances which were kicked off via qa_run_nimbus.sh
 function get_ec2_instances() {
-    aws ec2 describe-instances --filters "Name=tag-value,Values=*_auto_*" | jq .Reservations[].Instances[].Tags[].Value | tr -d \"
+    aws ec2 describe-instances --filters "Name=tag-value,Values=*_auto_*" --query "Reservations[*].Instances[*].Tags[*].Value" --output text > instances.txt
+    uniq -c instances.txt
+    rm instances.txt
 }
