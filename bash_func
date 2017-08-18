@@ -3,7 +3,7 @@
 ######################################################
 
 # Main ssh func, copies over dotfiles.
-function pssh() {
+function gssh() {
     ssh $1 "mkdir ~/.packard_dotfiles 2>/dev/null"
     scp -qr ~/.packard_dotfiles/[!.]* $1:~/.packard_dotfiles/
     ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/bashrc"

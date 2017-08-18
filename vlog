@@ -3,7 +3,7 @@
 usage ()
 {
 echo "\
-This script is used to make opening and viewing the vertica log a lot easier.
+This script is used to make opening or tailing the vertica log a lot faster
 
 Usage: $0 -d jarjarBinks
 
@@ -42,15 +42,23 @@ tail_log()
 {
     if [ "$is_nimbus" == True ]; then
         if is_compat; then 
-            tail -f /vertica/data/"$DB"/node0*_catalog/vertica.log
+            if [ -d /vertica/data/  ]; then
+                tail -f /vertica/data/"$DB"/node*_catalog/vertica.log
+            else
+                tail -f /scratch_b/qa/"$DB"/node*_catalog/vertica.log
+            fi
         else
-            tail -f /vertica/data/"$DB"/v_"${DB,,}"_node000*_catalog/vertica.log
+            if [ -d /vertica/data ]; then
+                tail -f /vertica/data/"$DB"/v_"${DB,,}"_node*_catalog/vertica.log
+            else
+                tail -f /scratch_b/qa/"$DB"/v_"${DB,,}"_node*_catalog/vertica.log
+            fi
         fi
     else
         if is_compat; then
-            tail -f /scratch_b/qa/"$DB"/node0*_catalog/vertica.log
+            tail -f /scratch_b/qa/"$DB"/node*_catalog/vertica.log
         else
-            tail -f /scratch_b/qa/"$DB"/v_"${DB,,}"_node000*_catalog/vertica.log
+            tail -f /scratch_b/qa/"$DB"/v_"${DB,,}"_node*_catalog/vertica.log
         fi
     fi
 }
@@ -59,15 +67,23 @@ open_log()
 {
     if [ "$is_nimbus" == True ]; then
         if is_compat; then
-            vim -u ~/.vimrc_gpackard /vertica/data/"$DB"/node0*_catalog/vertica.log
+            if [ -d /vertica/data ]; then
+                vim -u ~/.packard_dotfiles/vimrc_gpackard /vertica/data/"$DB"/node*_catalog/vertica.log
+            else
+                vim -u ~/.packard_dotfiles/vimrc_gpackard /scratch_b/qa/"$DB"/node*_catalog/vertica.log
+            fi
         else
-            vim -u ~/.vimrc_gpackard /vertica/data/"$DB"/v_"${DB,,}"_node000*_catalog/vertica.log
+            if [ -d /vertica/data ]; then
+                vim -u ~/.packard_dotfiles/vimrc_gpackard /vertica/data/"$DB"/v_"${DB,,}"_node*_catalog/vertica.log
+            else
+                vim -u ~/.packard_dotfiles/vimrc_gpackard /scratch_b/qa/"$DB"/v_"${DB,,}"_node*_catalog/vertica.log
+            fi
         fi
     else
         if is_compat; then
-            vim -u ~/.vimrc_gpackard /scratch_b/qa/"$DB"/node0*_catalog/vertica.log
+            vim -u ~/.packard_dotfiles/vimrc_gpackard /scratch_b/qa/"$DB"/node*_catalog/vertica.log
         else
-            vim -u ~/.vimrc_gpackard /scratch_b/qa/"$DB"/v_"${DB,,}"_node000*_catalog/vertica.log
+            vim -u ~/.packard_dotfiles/vimrc_gpackard /scratch_b/qa/"$DB"/v_"${DB,,}"_node*_catalog/vertica.log
         fi
     fi
 }
@@ -75,13 +91,21 @@ open_log()
 is_compat()
 {
     if [ "$is_nimbus" == True ]; then
-        if [ -d /vertica/data/"$DB"/node0*_catalog ]; then
-            return 0
+        if [ -d /vertica/data/ ]; then
+            if [ -d /vertica/data/"$DB"/node*_catalog ]; then
+                return 0
+            else
+                return 1
+            fi
         else
-            return 1
+            if [ -d /scratch_b/qa/"$DB"/node*_catalog ]; then
+                return 0
+            else
+                return 1
+            fi
         fi
     else
-        if [ -d /scratch_b/qa/"$DB"/node0*_catalog ]; then
+        if [ -d /scratch_b/qa/"$DB"/node*_catalog ]; then
             return 0
         else
             return 1
