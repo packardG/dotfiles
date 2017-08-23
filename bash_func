@@ -133,7 +133,7 @@ function get_untagged_buckets() {
 # Get list of running instances
 # All instances which were kicked off via qa_run_nimbus.sh
 function get_ec2_instances() {
-    aws ec2 describe-instances --filters "Name=tag-value,Values=*_auto_*" --query "Reservations[*].Instances[*].Tags[*].Value" --output text > instances.txt
+    aws ec2 describe-instances --filters "Name=tag-value,Values=*_auto_*" --query "Reservations[*].Instances[*].Tags[?Key=='Name'].Value" --output text > instances.txt
     uniq -c instances.txt
     rm instances.txt
 }
