@@ -24,8 +24,13 @@ function vlog() {
     if [ "$1" = "-t" ]; then
         tail -f `admintools -t list_db -d "${@:2}" | awk '/^Catalog/{print $3}'`/vertica.log
     else
-        vim `admintools -t list_db -d $1 | awk '/^Catalog/{print $3}'`/vertica.log
+        vim `admintools -t list_db -d "$1" | awk '/^Catalog/{print $3}'`/vertica.log
     fi
+}
+
+# Jump to catalog dir
+function catdir() {
+    cd `admintools -t list_db -d "$1" | awk '/^Catalog/{print $3}'`
 }
 
 # Create 'regular' database
