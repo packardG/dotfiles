@@ -1,4 +1,4 @@
-# Main ssh func, copies over dotfiles.
+# Main ssh func, copies over dotfiles. Ignores .git and other hidden files
 function gssh() {
     ssh $1 "mkdir ~/.packard_dotfiles 2>/dev/null"
     scp -qr ~/.packard_dotfiles/[!.]* $1:~/.packard_dotfiles/
