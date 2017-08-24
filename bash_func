@@ -1,7 +1,3 @@
-######################################################
-# Vertica Functions
-######################################################
-
 # Main ssh func, copies over dotfiles.
 function gssh() {
     ssh $1 "mkdir ~/.packard_dotfiles 2>/dev/null"
@@ -9,21 +5,27 @@ function gssh() {
     ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/bashrc"
 }
 
+######################################################
+# Vertica Functions
+######################################################
+
 # Helpful installer function for vertica
 function install_rpm() {
   /scratch_b/qa/vertica/QA/VT_Scenario/run_qa_scenario --install_vertica -L --rpm_dir="$1" --ignore_install_fail
 }
 
+# Easy connect to db
 function pvsql() {
-  is_nimbus=`grep -A5 "$1" /opt/vertica/config/admintools.conf | grep 'is_eon_mode' | awk '{printf $3}'`
-  if [ "$is_nimbus" == False ]; then
-    /opt/vertica/bin/vsql -p `cat /scratch_b/qa/"$1"/port.dat`
-  else
-    /opt/vertica/bin/vsql -p `cat /vertica/data/"$1"/port.dat 2>/dev/null` 2>/dev/null
-    if [ "$?" != 0 ]; then
-        /opt/vertica/bin/vsql -p `cat /scratch_b/qa/"$1"/port.dat`
+  /opt/vertica/bin/vsql -p `admintools -t list_db -d "$1" | awk '/^Port/{print $2}'`
+}
+
+# Either tail vertica log, or open in vim
+function vlog() {
+    if [ "$1" = "-t" ]; then
+        tail -f `admintools -t list_db -d "${@:2}" | awk '/^Catalog/{print $3}'`/vertica.log
+    else
+        vim `admintools -t list_db -d $1 | awk '/^Catalog/{print $3}'`/vertica.log
     fi
-  fi
 }
 
 # Create 'regular' database
@@ -79,6 +81,17 @@ function dbdf() {
     done
 }
 
+# Run command across all hosts in cluster
+function dbfunc() {
+    for host in ${HOSTLIST//,/ }
+    do
+        echo "---------------------------------------------------------------"
+        echo "Host: $host"
+        echo "---------------------------------------------------------------"
+        ssh "$host" "$@"
+    done
+}
+
 # Function for kicking off stress tests in Nimbus on EC2
 function run_stress() {
     cd $STRESS_VT
@@ -88,6 +101,10 @@ function run_stress() {
 ######################################################
 # Misc. Functions
 ######################################################
+function tf() {
+    tail -f "$1"
+}
+
 function mkdircd() {
     mkdir "$1" && cd "$1"
 }

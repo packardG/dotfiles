@@ -108,5 +108,3 @@ source ~/.packard_dotfiles/bash_func
 # Sets $HOSTLIST and $HOSTx variables automatically
 # To add new clusters, add hostlist to the hostlist file and cluster_exports.sh
 eval $(~/.packard_dotfiles/cluster_exports.sh)
-
-export PATH=$PATH:~/.packard_dotfiles
