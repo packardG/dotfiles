@@ -22,7 +22,5 @@ export PATH=$PATH:/opt/vertica/bin
 export PATH=$PATH:/home/gpackard/dev_tools
 
 # AWS credentials
-if [ "$USER" != release ]; then
-    export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
-    export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
-fi
+export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
+export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
