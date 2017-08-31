@@ -146,7 +146,7 @@ function get_bucket_tags() {
 function get_untagged_buckets() {
     for bucket in `aws s3api list-buckets --query "Buckets[*].Name" | tr -d \",[]`
     do
-        region=$(aws s3api get-bucket-location --bucket $bucket --output text)
+        region=$(aws s3api get-bucket-location --bucket $bucket --output text 2>/dev/null)
         # For some reason this returns 'None' for us-east-1. Maybe because it is my default in configure?
         # Possible this could give different results for other users depending on their configured default region, will have to test
         if [ "$region" == "None" ];then
