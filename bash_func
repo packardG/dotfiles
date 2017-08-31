@@ -124,6 +124,11 @@ function spongebob() {
     echo "$@" | tr -d ' ' | sed 's/\(.\)\(.\)/\u\1 \l\2 /g'
 }
 
+# Dump timestamp and avg mem usage into csv
+function memsar() {
+    sar -r | grep -v Linux | grep -v Average | awk '{if (NR!=1) {print}}' | awk '{printf $1","$5"\n";}' | awk '{if (NR!=1) {print}}' > test.csv
+}
+
 ######################################################
 # AWS Functions
 ######################################################
@@ -155,7 +160,7 @@ function get_untagged_buckets() {
 # Get list of running instances
 # All instances which were kicked off via qa_run_nimbus.sh
 function get_ec2_instances() {
-    aws ec2 describe-instances --filters "Name=tag-value,Values=*_auto_*" --query "Reservations[*].Instances[*].Tags[?Key=='Name'].Value" --output text > instances.txt
+    aws ec2 describe-instances --filters "Name=tag-value,Values=QA_Server" --query "Reservations[*].Instances[*].Tags[?Key=='Name'].Value" --output text > instances.txt
     uniq -c instances.txt
     rm instances.txt
 }
