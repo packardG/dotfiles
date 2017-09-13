@@ -22,9 +22,19 @@ function pvsql() {
 # Either tail vertica log, or open in vim
 function vlog() {
     if [ "$1" = "-t" ]; then
-        tail -f `admintools -t list_db -d "${@:2}" | awk '/^Catalog/{print $3}'`/vertica.log
+        taillog=$(admintools -t list_db -d "${@:2}" | awk '/^Catalog/{print $3}')
+        if [ -e ${taillog}/vertica.log ]; then
+            tail -f "$taillog"/vertica.log
+        else
+            tail -f "$taillog"/vertica*log*
+        fi
     else
-        vim `admintools -t list_db -d "$1" | awk '/^Catalog/{print $3}'`/vertica.log
+        log=$(admintools -t list_db -d "$1" | awk '/^Catalog/{print $3}')
+        if [ -e ${log}/vertica.log ]; then
+            vim "$log"/vertica.log
+        else
+            vim "$log"/vertica*log*
+        fi
     fi
 }
 
@@ -40,7 +50,7 @@ function pcreate() {
 
 # Nimbus create db func.
 function ncreate() {
-  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1"
+  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/
 }
 
 # Start db
@@ -101,6 +111,10 @@ function dbfunc() {
 function run_stress() {
     cd $STRESS_VT
     nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --shard_count=6 --communal_storage=s3://nimbusdb/gpackard/stress/"$1"/$$ &
+}
+
+function stress_cluster() {
+    /scratch_b/qa/vertica/QA/tools/nimbus/qa_run_nimbus.sh -n 6 -s Stress_VT &
 }
 
 ######################################################
