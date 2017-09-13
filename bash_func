@@ -178,3 +178,8 @@ function get_ec2_instances() {
     uniq -c instances.txt
     rm instances.txt
 }
+
+# Dump cluster info
+function dump_ec2() {
+    ~/manage_aws.py --ec2-describe --instance-ids "$1"
+}
