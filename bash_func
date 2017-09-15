@@ -181,5 +181,5 @@ function get_ec2_instances() {
 
 # Dump cluster info
 function dump_ec2() {
-    ~/manage_aws.py --ec2-describe --instance-ids "$1"
+    ~/manage_aws.py --ec2-describe --key gpackard
 }

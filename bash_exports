@@ -14,8 +14,8 @@ export SVNROOT=svn+ssh://svn/repos
 
 export r1801="release@engvmqa1801"
 export p1801="gpackard@engvmqa1801"
-export r1805="release@engvmqa1805"
-export p1805="gpackard@engvmqa1805"
+export r1806="release@engvmqa1806"
+export p1806="gpackard@engvmqa1806"
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
