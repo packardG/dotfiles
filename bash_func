@@ -5,6 +5,12 @@ function gssh() {
     ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/bashrc"
 }
 
+function sumissh() {
+    ssh gilly@sumi "mkdir ~/.packard_dotfiles 2>/dev/null"
+    scp -qr ~/.packard_dotfiles/[!.]* gilly@sumi:~/.packard_dotfiles/
+    ssh -tAx gilly@sumi "bash --rcfile ~/.packard_dotfiles/bashrc"
+}
+
 ######################################################
 # Vertica Functions
 ######################################################
