@@ -15,9 +15,19 @@ alias Nimbus='cd /scratch_b/qa/vertica/QA/tools/nimbus'
 
 # Helpful tools/utils
 alias t='tree -FhC -L 2'
-alias ls='ls -lrt --color=auto'
-alias sl='ls -lrt --color=auto'
-alias la='ls -la'
+
+# Macbook uses G instead of --color
+host=$(hostname)
+if [ "$host" == "greyjoy.local" ]; then
+	alias ls='ls -lrtG'
+	alias sl='ls -lrtG'
+	alias la='ls -laG'
+else
+	alias ls='ls -lrt --color=auto'
+	alias sl='ls -lrt --color=auto'
+	alias la='ls -la --color=auto'
+fi
+
 alias ..='cd ..'
 alias ports='netstat -tulanp'
 # Same as sudo !!
