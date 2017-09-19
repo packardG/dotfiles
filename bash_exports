@@ -14,12 +14,13 @@ export SVNROOT=svn+ssh://svn/repos
 
 export r1801="release@engvmqa1801"
 export p1801="gpackard@engvmqa1801"
-export r1805="release@engvmqa1805"
-export p1805="gpackard@engvmqa1805"
+export r1806="release@engvmqa1806"
+export p1806="gpackard@engvmqa1806"
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
 export PATH=$PATH:/home/gpackard/dev_tools
+export PATH=$PATH:/scratch_b/qa/vertica/QA/VT_Scenario/lib
 
 # AWS credentials
 export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )

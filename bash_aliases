@@ -3,8 +3,6 @@ alias at='/opt/vertica/bin/admintools -t '
 alias atvc='/opt/vertica/bin/admintools -t view_cluster'
 alias vv='/opt/vertica/bin/vertica -V'
 alias vps='ps -ef | grep vertica '
-# Create 6 node stress EC2 cluster
-alias stress_cluster='/scratch_b/qa/vertica/QA/tools/nimbus/qa_run_nimbus.sh -i c3.4xlarge -n 6 -s Stress_VT &'
 
 # Quick cd to common directories.
 alias VT_Scenario='cd /scratch_b/qa/vertica/QA/VT_Scenario'
