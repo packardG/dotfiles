@@ -5,6 +5,7 @@ function gssh() {
     ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/bashrc"
 }
 
+# Custom ssh func for connecting to Raspberry Pi
 function sumissh() {
     ssh gilly@sumi "mkdir ~/.packard_dotfiles 2>/dev/null"
     scp -qr ~/.packard_dotfiles/[!.]* gilly@sumi:~/.packard_dotfiles/
