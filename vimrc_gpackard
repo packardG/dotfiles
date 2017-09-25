@@ -9,9 +9,9 @@ set laststatus=2 " Always show status line
 set showcmd " Show command in status line
 set hlsearch " Highlight all search matches
 set wildmenu " Use <tab> for autocomplete command menu
-set noexpandtab " Use appropriate num of spaces to insert a tab
-set tabstop=8 " Number of spaces to a <tab>
-set shiftwidth=8 " Number of spaces to use for each step of indent
+set expandtab " Use appropriate num of spaces to insert a tab
+set tabstop=4 " Number of spaces to a <tab>
+set shiftwidth=4 " Number of spaces to use for each step of indent
 set autoindent " Turn on auto indenting
 set showmode " Show what mode we are in (Insert, etc)
 set showmatch " Show matching brackets
