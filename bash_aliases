@@ -14,7 +14,7 @@ alias Scratch='cd /scratch_b/qa/'
 alias Nimbus='cd /scratch_b/qa/vertica/QA/tools/nimbus'
 
 # Helpful tools/utils
-alias t='tree -FhC -L 2'
+alias t='tree -DFhC -L 2'
 
 # Macbook uses G instead of --color
 host=$(hostname)
