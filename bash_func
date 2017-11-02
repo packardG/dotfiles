@@ -57,7 +57,7 @@ function pcreate() {
 
 # Nimbus create db func.
 function ncreate() {
-  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/
+  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --get-aws-credentials-from-env-vars --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/ --depot-size 15G
 }
 
 # Start db
