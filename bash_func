@@ -145,11 +145,6 @@ function spongebob() {
     echo "$@" | tr -d ' ' | sed 's/\(.\)\(.\)/\u\1 \l\2 /g'
 }
 
-# Dump timestamp and avg mem usage into csv
-function memsar() {
-    sar -r | grep -v Linux | grep -v Average | awk '{if (NR!=1) {print}}' | awk '{printf $1","$5"\n";}' | awk '{if (NR!=1) {print}}' > test.csv
-}
-
 ######################################################
 # AWS Functions
 ######################################################
@@ -189,4 +184,9 @@ function get_ec2_instances() {
 # Dump cluster info
 function dump_ec2() {
     ~/manage_aws.py --ec2-describe --key gpackard
+}
+
+# Dump S3 bucket info
+function dump_buckets() {
+    ~/manage_aws.py --s3-describe --key gpackard
 }
