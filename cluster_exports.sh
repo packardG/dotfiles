@@ -27,9 +27,7 @@ if   [ $(contains "${engvmqa1806[@]}" $(hostname)) == "y" ]; then
         echo "export HOST$i=${engvmqa1806[$(expr $i - 1)]}"
         echo "export NODE$i=node0$i"
     done
-fi
-
-if   [ $(contains "${qastress55[@]}" $(hostname)) == "y" ]; then
+elif   [ $(contains "${qastress55[@]}" $(hostname -s)) == "y" ]; then
     hostlist=$(join_by , ${qastress55[@]})
     echo "export HOSTLIST=$hostlist"
     echo "export HOST=$hostlist"
