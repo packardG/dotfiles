@@ -94,12 +94,18 @@ function dbps() {
 # Check disk space on all hosts in cluster.
 # Useful for stress clusters
 function dbdf() {
+    if [ -d /vertica/data ]; then
+        base='/vertica/data/'
+    else
+        base='/scratch_b/qa'
+    fi
+
     for host in ${HOSTLIST//,/ }
     do
         echo "---------------------------------------------------------------"
         echo "Host: $host"
         echo "---------------------------------------------------------------"
-        ssh "$host" "df -ah /vertica/data"
+        ssh "$host" "df -ah $base"
     done
 }
 
