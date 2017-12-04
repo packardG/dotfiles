@@ -120,12 +120,19 @@ function dbfunc() {
     done
 }
 
+# Copy binary and catalog directories up to S3
+function s3_upload() {
+    aws s3 cp /opt/vertica/bin/vertica ${1}/binary/
+    dbfunc "find ${2}/*catalog -type d -exec aws s3 cp --recursive {} ${1}{} \;"
+}
+
 # Function for kicking off stress tests in Nimbus on EC2
 function run_stress() {
     cd $STRESS_VT
     nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --shard_count=6 --communal_storage=s3://nimbusdb/gpackard/stress/"$1"/$$ &
 }
 
+# Create a 6 node stress cluster without auto-running tests
 function stress_cluster() {
     /scratch_b/qa/vertica/QA/tools/nimbus/qa_run_nimbus.sh -n 6 -s Stress_VT &
 }
@@ -155,15 +162,6 @@ function spongebob() {
 # AWS Functions
 ######################################################
 
-# Get qa stress bucket tags for easy finger-pointing or deletion
-function get_bucket_tags() {
-    for bucket in `aws s3api list-buckets --query "Buckets[*].Name" | grep qastress | tr -d \",`
-    do
-        tags=$(aws s3api get-bucket-tagging --bucket $bucket --query "TagSet[]" --output text | awk '{printf "{"$1": " $2"}"}')
-        echo $bucket '|' $tags
-    done
-}
-
 # Get all untagged buckets for easy finger-pointing or deletion
 function get_untagged_buckets() {
     for bucket in `aws s3api list-buckets --query "Buckets[*].Name" | tr -d \",[]`
@@ -179,20 +177,30 @@ function get_untagged_buckets() {
     done
 }
 
-# Get list of running instances
-# All instances which were kicked off via qa_run_nimbus.sh
-function get_ec2_instances() {
-    aws ec2 describe-instances --filters "Name=tag-value,Values=qa_server" --query "Reservations[*].Instances[*].Tags[?Key=='Name'].Value" --output text > instances.txt
-    uniq -c instances.txt
-    rm instances.txt
+# Get qa stress bucket tags for easy finger-pointing or deletion
+function get_buckets() {
+    ~/manage_aws.py s3-describe -f Team=qa_server
+}
+
+# Get list of instances owned by the qa_server team
+function get_ec2() {
+    if [ -n "$1" ]; then
+        ~/manage_aws.py ec2-describe -r "$1" -f Team=qa_server
+    else
+        ~/manage_aws.py ec2-describe -f Team=qa_server
+    fi
 }
 
 # Dump cluster info
 function dump_ec2() {
-    ~/manage_aws.py --ec2-describe --key gpackard
+    if [ -n "$1" ]; then
+        ~/manage_aws.py ec2-describe -r "$1" -f Owner=gpackard
+    else
+        ~/manage_aws.py ec2-describe -f Owner=gpackard
+    fi
 }
 
 # Dump S3 bucket info
 function dump_buckets() {
-    ~/manage_aws.py --s3-describe --key gpackard
+    ~/manage_aws.py s3-describe -f Owner=gpackard
 }
