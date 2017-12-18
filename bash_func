@@ -16,14 +16,18 @@ function sumissh() {
 # Vertica Functions
 ######################################################
 
-# Helpful installer function for vertica
+# Helpful installer function shortcut
 function install_rpm() {
-  /scratch_b/qa/vertica/QA/VT_Scenario/run_qa_scenario --install_vertica -L --rpm_dir="$1" --ignore_install_fail
+    if [ -n "$1" ]; then
+        ~/installer.py --install_vertica --hostlist="$HOSTLIST" --rpm-dir="$1" --ignore_install_fail
+    else
+        ~/installer.py --install_vertica --hostlist="$HOSTLIST" --ignore_install_fail
+    fi
 }
 
 # Easy connect to db
 function pvsql() {
-  /opt/vertica/bin/vsql -p `admintools -t list_db -d "$1" | awk '/^Port/{print $2}'`
+    /opt/vertica/bin/vsql -p `admintools -t list_db -d "$1" | awk '/^Port/{print $2}'`
 }
 
 # Either tail vertica log, or open in vim
@@ -52,32 +56,28 @@ function catdir() {
 
 # Create 'regular' database
 function pcreate() {
-  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST
+    /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST
 }
 
 # Nimbus create db func.
 function ncreate() {
-  /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --get-aws-credentials-from-env-vars --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/ --depot-size 15G
+    /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --get-aws-credentials-from-env-vars --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/
 }
 
 # Start db
 function pstart() {
-  /opt/vertica/bin/admintools -t start_db -d "$1"
+    /opt/vertica/bin/admintools -t start_db -d "$1"
 }
 
 # Stop db
 function pstop() {
-  /opt/vertica/bin/admintools -t stop_db -d "$1"
+    /opt/vertica/bin/admintools -t stop_db -d "$1"
 }
 
 # Stop && Drop db
 function pdrop() {
-  /opt/vertica/bin/admintools -t stop_db -d "$1"
-  /opt/vertica/bin/admintools -t drop_db -d "$1"
-}
-
-function pwipe() {
-  /opt/vertica/bin/vsql -p`cat /scratch_b/qa/"$1"/port.dat` -f $TOOLS/mhayden/remove_all_tables_views_schemas.sql -d"$1"
+    /opt/vertica/bin/admintools -t stop_db -d "$1"
+    /opt/vertica/bin/admintools -t drop_db -d "$1"
 }
 
 # Check if vertica db processes still running on all hosts in cluster
@@ -126,7 +126,7 @@ function s3_upload() {
     dbfunc "find ${2}/*catalog -type d -exec aws s3 cp --recursive {} ${1}{} \;"
 }
 
-# Function for kicking off stress tests in Nimbus on EC2
+# Function for kicking off Nimbus stress tests
 function run_stress() {
     cd $STRESS_VT
     nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --shard_count=6 --communal_storage=s3://nimbusdb/gpackard/stress/"$1"/$$ &
@@ -148,7 +148,6 @@ function mkdircd() {
     mkdir "$1" && cd "$1"
 }
 
-# pstree func.
 function vtree() {
     pstree -alp $(whoami)
 }
@@ -167,8 +166,7 @@ function get_untagged_buckets() {
     for bucket in `aws s3api list-buckets --query "Buckets[*].Name" | tr -d \",[]`
     do
         region=$(aws s3api get-bucket-location --bucket $bucket --output text 2>/dev/null)
-        # For some reason this returns 'None' for us-east-1. Maybe because it is my default in configure?
-        # Possible this could give different results for other users depending on their configured default region, will have to test
+        # Returns 'None' for us-east-1.
         if [ "$region" == "None" ];then
             region=us-east-1
         fi
@@ -177,9 +175,9 @@ function get_untagged_buckets() {
     done
 }
 
-# Get qa stress bucket tags for easy finger-pointing or deletion
+# Get qa stress buckets for easy finger-pointing or deletion
 function get_buckets() {
-    ~/manage_aws.py s3-describe -f Team=qa_server
+    ~/manage_aws.py s3-describe -f Team=qa_server,DedicatedBucket=true
 }
 
 # Get list of instances owned by the qa_server team
