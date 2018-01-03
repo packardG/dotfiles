@@ -18,6 +18,7 @@ export r1806="release@engvmqa1806"
 export p1806="gpackard@engvmqa1806"
 export r55="release@qastress-55"
 export p55="gpackard@qastress-55"
+export r1301="release@engvmqa1301"
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
