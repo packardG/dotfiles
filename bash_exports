@@ -19,6 +19,17 @@ export p1806="gpackard@engvmqa1806"
 export r55="release@qastress-55"
 export p55="gpackard@qastress-55"
 export r1301="release@engvmqa1301"
+export rqco19="release@qco55srv19"
+export pqco19="gpackard@qco55srv19"
+export rclient="release@clientVM01"
+export pclient="gpackard@clientVM01"
+export rqco15="release@qco55srv15"
+export pqco15="gpackard@qco55srv15"
+export rhua="release@hua-suse-01"
+export rDR08="release@DistributedR08"
+export pDR08="gpackard@DistributedR08"
+export rqadl="release@qadl15"
+export pqadl="gpackard@qadl15"
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
@@ -26,7 +37,7 @@ export PATH=$PATH:/home/gpackard/dev_tools
 export PATH=$PATH:/scratch_b/qa/vertica/QA/VT_Scenario/lib
 
 # AWS credentials set these only locally
-if [[ $(hostname -A) = *verticacorp.com* ]]; then
+if [[ $(hostname -f) = *verticacorp.com* ]]; then
     export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
     export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
 fi
