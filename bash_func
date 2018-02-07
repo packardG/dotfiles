@@ -19,9 +19,9 @@ function sumissh() {
 # Helpful installer function shortcut
 function install_rpm() {
     if [ -n "$1" ]; then
-        ~/installer.py --install_vertica --hostlist="$HOSTLIST" --rpm-dir="$1" --ignore_install_fail
+        /home/gpackard/installer.py install_vertica --hostlist="$HOSTLIST" --rpm-dir="$1" --ignore_install_fail
     else
-        ~/installer.py --install_vertica --hostlist="$HOSTLIST" --ignore_install_fail
+        /home/gpackard/installer.py install_vertica --hostlist="$HOSTLIST" --ignore_install_fail
     fi
 }
 
@@ -129,7 +129,7 @@ function s3_upload() {
 # Function for kicking off Nimbus stress tests
 function run_stress() {
     cd $STRESS_VT
-    nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --shard_count=6 --communal_storage=s3://nimbusdb/gpackard/stress/"$1"/$$ &
+    nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --nimbus &
 }
 
 # Create a 6 node stress cluster without auto-running tests
