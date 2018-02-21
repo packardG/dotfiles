@@ -19,9 +19,9 @@ function sumissh() {
 # Helpful installer function shortcut
 function install_rpm() {
     if [ -n "$1" ]; then
-        /home/gpackard/installer.py install_vertica --hostlist="$HOSTLIST" --rpm-dir="$1" --ignore_install_fail
+        /home/gpackard/installer.py install-vertica --hostlist="$HOSTLIST" --rpm-dir="$1" --ignore-install-fail
     else
-        /home/gpackard/installer.py install_vertica --hostlist="$HOSTLIST" --ignore_install_fail
+        /home/gpackard/installer.py install-vertica --hostlist="$HOSTLIST" --ignore-install-fail
     fi
 }
 
