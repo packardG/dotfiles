@@ -33,7 +33,6 @@ export pqadl="gpackard@qadl15"
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
-export PATH=$PATH:/home/gpackard/dev_tools
 export PATH=$PATH:/scratch_b/qa/vertica/QA/VT_Scenario/lib
 
 # AWS credentials set these only locally
