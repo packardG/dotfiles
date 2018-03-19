@@ -61,7 +61,12 @@ function pcreate() {
 
 # Nimbus create db func.
 function ncreate() {
-    /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --get-aws-credentials-from-env-vars --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/
+    is_cluster_ec2
+    if [ "$?" = 0 ]; then
+        /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot
+    else
+        /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --get-aws-credentials-from-env-vars --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/
+    fi
 }
 
 # Start db
@@ -182,23 +187,30 @@ function get_buckets() {
 
 # Get list of instances owned by the qa_server team
 function get_ec2() {
-    if [ -n "$1" ]; then
-        ~/manage_aws.py ec2-describe -r "$1" -f Team=qa_server
-    else
-        ~/manage_aws.py ec2-describe -f Team=qa_server
-    fi
+    ~/manage_aws.py ec2-describe -f Team=qa_server
 }
 
 # Dump cluster info
 function dump_ec2() {
-    if [ -n "$1" ]; then
-        ~/manage_aws.py ec2-describe -r "$1" -f Owner=gpackard
-    else
-        ~/manage_aws.py ec2-describe -f Owner=gpackard
-    fi
+    ~/manage_aws.py ec2-describe -f Owner=gpackard
 }
 
 # Dump S3 bucket info
 function dump_buckets() {
     ~/manage_aws.py s3-describe -f Owner=gpackard
+}
+
+# Return number of S3 buckets owned by entire company
+function num_buckets() {
+    num=$(aws s3 ls | wc -l)
+    echo "$num total buckets"
+}
+
+# Check if machines are up on EC2
+function is_cluster_ec2() {
+    if [ -f /sys/hypervisor/uuid ] && [ $(head -c 3 /sys/hypervisor/uuid) == 'ec2' ]; then
+        return 0
+    else
+        return 1
+    fi
 }
