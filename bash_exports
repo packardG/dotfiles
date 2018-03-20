@@ -19,6 +19,7 @@ export p1806="gpackard@engvmqa1806"
 export r55="release@qastress-55"
 export p55="gpackard@qastress-55"
 export r1301="release@engvmqa1301"
+export p1301="gpackard@engvmqa1301"
 export rqco19="release@qco55srv19"
 export pqco19="gpackard@qco55srv19"
 export rclient="release@clientVM01"
@@ -30,6 +31,9 @@ export rDR08="release@DistributedR08"
 export pDR08="gpackard@DistributedR08"
 export rqadl="release@qadl15"
 export pqadl="gpackard@qadl15"
+
+# Normal PATH variables
+export PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
