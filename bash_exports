@@ -31,6 +31,8 @@ export rDR08="release@DistributedR08"
 export pDR08="gpackard@DistributedR08"
 export rqadl="release@qadl15"
 export pqadl="gpackard@qadl15"
+export rstress="release@vqastress-01"
+export pstress="gpackard@vqastress-01"
 
 # Normal PATH variables
 export PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin
