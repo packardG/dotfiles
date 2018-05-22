@@ -206,6 +206,22 @@ function num_buckets() {
     echo "$num total buckets"
 }
 
+# Return number of EC2 clusters owned by QA Server team
+# Or, if provided, a particular user
+function num_clusters() {
+    ~/manage_aws.py ec2-describe -f Team=qa_server --log-level QUIET > ~/clusters.txt
+    if [ -n "$1" ]; then
+        num=$(grep "Cluster Name: $1.*" ~/clusters.txt | wc -l)
+        grep "Cluster Name: $1.*" ~/clusters.txt
+        echo -e "\n$1 owns $num total clusters"
+    else
+        num=$(grep "Cluster Name:" ~/clusters.txt | wc -l)
+        grep "Cluster Name:" ~/clusters.txt | sort
+        echo -e "\nqa_server owns $num total clusters"
+    fi
+    rm ~/clusters.txt
+}
+
 # Check if machines are up on EC2
 function is_cluster_ec2() {
     if [ -f /sys/hypervisor/uuid ] && [ $(head -c 3 /sys/hypervisor/uuid) == 'ec2' ]; then
