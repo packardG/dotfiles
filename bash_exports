@@ -46,3 +46,6 @@ if [[ $(hostname -f) = *verticacorp.com* ]]; then
     export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
     export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
 fi
+
+#export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
+#export GOOGLE_APPLICATION_CREDENTIALS="/home/gpackard/.ssh/VerticaTests-4c21be7a7892.json"
