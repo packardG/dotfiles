@@ -190,7 +190,7 @@ function get_untagged_instances() {
     for region in ${REGIONS//,/ }
     do
         echo -e "\nRegion: $region" >> untagged_instances.txt
-        aws ec2 describe-instances --region "$region" --output text --query 'Reservations[].Instances[?!not_null(Tags[?Key == `Owner`].Value)] | [].[InstanceId,Tags[?Key == `Name`]]' >> untagged_instances.txt
+        aws ec2 describe-instances --region "$region" --output text --query 'Reservations[].Instances[?!not_null(Tags[?Key == `Owner`].Value)] | [].[InstanceId,Tags[?Key == `Name`].Value]' >> untagged_instances.txt
     done
 }
 
