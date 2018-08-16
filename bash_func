@@ -180,7 +180,27 @@ function get_untagged_buckets() {
             region=us-east-1
         fi
         tags=$(aws s3api get-bucket-tagging --bucket $bucket --region $region --query "TagSet[]" --output text 2>/dev/null | awk '{printf "{"$1": " $2"}"}')
-        echo "$bucket | $tags" | awk 'NF<3' | tr -d '|' >> buckets_$$.txt
+        echo "$bucket | $tags" | awk 'NF<3' | tr -d '|' >> untagged_buckets.txt
+    done
+}
+
+# Get all instances that don't have an Owner tag
+function get_untagged_instances() {
+    REGIONS="us-east-1,us-east-2,us-west-1,us-west-2"
+    for region in ${REGIONS//,/ }
+    do
+        echo -e "\nRegion: $region" >> untagged_instances.txt
+        aws ec2 describe-instances --region "$region" --output text --query 'Reservations[].Instances[?!not_null(Tags[?Key == `Owner`].Value)] | [].[InstanceId,Tags[?Key == `Name`]]' >> untagged_instances.txt
+    done
+}
+
+# Get all EBS volumes that don't have an Owner tag
+function get_untagged_volumes() {
+    REGIONS="us-east-1,us-east-2,us-west-1,us-west-2"
+    for region in ${REGIONS//,/ }
+    do
+        echo -e "\nRegion: $region" >> untagged_volumes.txt
+        aws ec2 describe-volumes  --output text  --query 'Volumes[?!not_null(Tags[?Key == `Owner`].Value)] | [].[VolumeId,Size]' >> untagged_volumes.txt
     done
 }
 
