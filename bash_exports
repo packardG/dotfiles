@@ -7,8 +7,8 @@ export SQLTEST="/scratch_b/qa/vertica/SQLTest"
 export SCRATCH="/scratch_b/qa"
 export TOOLS="/scratch_b/qa/vertica/QA/tools"
 
-export EMAIL="packard.ben.gilson@hpe.com"
-export MAILTO="packard.ben.gilson@hpe.com"
+export EMAIL="packard.ben.gilson@microfocus.com"
+export MAILTO="packard.ben.gilson@microfocus.com"
 
 export SVNROOT=svn+ssh://svn/repos
 
