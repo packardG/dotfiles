@@ -33,7 +33,7 @@ alias ports='netstat -tulanp'
 # Same as sudo !!
 alias fuck='sudo $(history -p \!\!)'
 # Minio client config directory differs on most Vertica clusters
-alias mc='/scratch_b/qa/vertica/QA/tools/nimbus/mc -C /scratch_b/qa/.mc'
+alias mc='/scratch_b/qa/vertica/QA/tools/nimbus/mc'
 
 # Env config
 alias vim='vim -u ~/.packard_dotfiles/vimrc_gpackard '
