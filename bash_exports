@@ -35,7 +35,7 @@ export rstress="release@vqastress-01"
 export pstress="gpackard@vqastress-01"
 
 # Normal PATH variables
-export PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin
+export PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/home/gpackard/git/serverfarm/
 
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
@@ -46,6 +46,3 @@ if [[ $(hostname -f) = *verticacorp.com* ]]; then
     export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
     export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
 fi
-
-#export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
-#export GOOGLE_APPLICATION_CREDENTIALS="/home/gpackard/.ssh/VerticaTests-4c21be7a7892.json"
