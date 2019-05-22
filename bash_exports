@@ -6,6 +6,8 @@ export QASTRESS="/scratch_b/qa/vertica/SQLTest/QAstress"
 export SQLTEST="/scratch_b/qa/vertica/SQLTest"
 export SCRATCH="/scratch_b/qa"
 export TOOLS="/scratch_b/qa/vertica/QA/tools"
+export ADMIN_LIB='Admintools'
+export ADMIN_LIB_DIR='/scratch_b/qa/vertica/QA/Stress_VT/lib'
 
 export EMAIL="packard.ben.gilson@microfocus.com"
 export MAILTO="packard.ben.gilson@microfocus.com"
