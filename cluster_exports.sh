@@ -15,7 +15,7 @@ function contains() {
 function join_by { local IFS="$1"; shift; echo "$*"; }
 
 engvmqa1806=("engvmqa1806" "engvmqa1807" "engvmqa1808" "engvmqa1809")
-qastress55=("qastress-55" "qastress-56" "qastress-57" "qastress-58" "qastress-59" "qastress-60")
+minio=("minio-01" "minio-02" "minio-03" "minio-04")
 engvmqa1301=("engvmqa1301" "engvmqa1302" "engvmqa1303" "engvmqa1304")
 qco55srv19=("qco55srv19" "qco55srv20" "qco55srv21" "qco55srv22") 
 clientvm01=("clientvm01" "clientvm02" "clientvm03" "clientvm04")
@@ -34,14 +34,14 @@ if   [ $(contains "${engvmqa1806[@]}" $(hostname)) == "y" ]; then
         echo "export HOST$i=${engvmqa1806[$(expr $i - 1)]}"
         echo "export NODE$i=node0$i"
     done
-elif   [ $(contains "${qastress55[@]}" $(hostname -s)) == "y" ]; then
-    hostlist=$(join_by , ${qastress55[@]})
+elif   [ $(contains "${minio[@]}" $(hostname -s)) == "y" ]; then
+    hostlist=$(join_by , ${minio[@]})
     echo "export HOSTLIST=$hostlist"
     echo "export HOST=$hostlist"
-    echo "export NNODES=${#qastress55[@]}"
-    for i in $(seq 1 ${#qastress55[@]})
+    echo "export NNODES=${#minio[@]}"
+    for i in $(seq 1 ${#minio[@]})
     do
-        echo "export HOST$i=${qastress55[$(expr $i - 1)]}"
+        echo "export HOST$i=${minio[$(expr $i - 1)]}"
         echo "export NODE$i=node0$i"
     done
 elif   [ $(contains "${engvmqa1301[@]}" $(hostname -s)) == "y" ]; then
