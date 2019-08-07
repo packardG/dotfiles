@@ -166,6 +166,10 @@ parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
+function ide() {
+    tmux split-window -v -p 30
+}
+
 ######################################################
 # AWS Functions
 ######################################################
