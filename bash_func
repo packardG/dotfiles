@@ -162,7 +162,7 @@ function spongebob() {
     echo "$@" | tr -d ' ' | sed 's/\(.\)\(.\)/\u\1 \l\2 /g'
 }
 
-parse_git_branch() {
+function parse_git_branch() {
     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
@@ -220,7 +220,7 @@ function get_ec2() {
 
 # Dump cluster info
 function dump_ec2() {
-    ~/manage_aws.py ec2-describe -f Owner=gpackard
+    ~/manage_aws.py ec2-describe -f Owner=gpackard --env-file
 }
 
 # Dump S3 bucket info
