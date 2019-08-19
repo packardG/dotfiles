@@ -38,3 +38,5 @@ alias mc='/scratch_b/qa/vertica/QA/tools/nimbus/mc'
 # Env config
 alias vim='vim -u ~/.packard_dotfiles/vimrc_gpackard '
 alias bash='bash --rcfile ~/.packard_dotfiles/bashrc'
+alias tmux='tmux -f ~/.packard_dotfiles/tmux.conf'
+alias tmuxnew='tmux -f ~/.packard_dotfiles/tmux.conf new -s fishtaco -n dev'

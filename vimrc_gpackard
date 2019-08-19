@@ -18,6 +18,9 @@ set showmatch " Show matching brackets
 set ruler " Show the line and col num of cursor
 set pastetoggle=<F3>
 set backspace=indent,eol,start
+set showtabline=2 " Always display the tabline, even if there is only one tab (powerline stuff)
+set noshowmode " Hide the default mode text (e.g. -- INSERT -- below the statusline) (powerline stuff)
+set term=screen-256color " Make sure vim uses powerline colorscheme inside tmux
 
 " Split window
 nmap ss :split<Return><C-w>w
@@ -40,3 +43,8 @@ augroup CursorLineOnlyInActiveWindow
     autocmd VimEnter,WinEnter,BufWinEnter * setlocal cursorline
     autocmd WinLeave * setlocal nocursorline
 augroup END
+
+python3 from powerline.vim import setup as powerline_setup
+python3 powerline_setup()
+python3 del powerline_setup
+let g:pymcd_powerline="py3"
