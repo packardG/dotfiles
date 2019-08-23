@@ -56,13 +56,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-if [ "$color_prompt" = yes ]; then
-    PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;92m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\]: \[$(tput sgr0)\]\[\033[38;5;93m\][\w]\[$(tput sgr0)\]\[\033[38;5;15m\]:\$(parse_git_branch) \\$ \[$(tput sgr0)\]"
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
@@ -104,6 +97,14 @@ fi
 source ~/.packard_dotfiles/bash_aliases
 source ~/.packard_dotfiles/bash_exports
 source ~/.packard_dotfiles/bash_func
+
+if [ "$color_prompt" = yes ]; then
+    PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;92m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\]: \[$(tput sgr0)\]\[\033[38;5;93m\][\w]\[$(tput sgr0)\]\[\033[38;5;15m\]:\$(parse_git_branch) \\$ \[$(tput sgr0)\]"
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
 
 # Sets $HOSTLIST and $HOSTx variables automatically
 # To add new clusters, add hostlist to the hostlist file and cluster_exports.sh
