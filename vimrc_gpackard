@@ -13,7 +13,6 @@ set expandtab " Use appropriate num of spaces to insert a tab
 set tabstop=4 " Number of spaces to a <tab>
 set shiftwidth=4 " Number of spaces to use for each step of indent
 set autoindent " Turn on auto indenting
-set showmode " Show what mode we are in (Insert, etc)
 set showmatch " Show matching brackets
 set ruler " Show the line and col num of cursor
 set pastetoggle=<F3>
