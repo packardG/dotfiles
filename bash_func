@@ -218,7 +218,12 @@ function get_ec2() {
     ~/manage_aws.py ec2-describe -f Team=qa_server
 }
 
-# Dump cluster info
+# Dump GCP cluster info
+function dump_gce() {
+    ~/manage_gcp.py gce-describe -f Owner=gpackard --env-file
+}
+
+# Dump AWS cluster info
 function dump_ec2() {
     ~/manage_aws.py ec2-describe -f Owner=gpackard --env-file
 }
