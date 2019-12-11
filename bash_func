@@ -5,13 +5,6 @@ function gssh() {
     ssh -tAx $1 "bash --rcfile ~/.packard_dotfiles/bashrc"
 }
 
-# Custom ssh func for connecting to Raspberry Pi
-function sumissh() {
-    ssh gilly@sumi "mkdir ~/.packard_dotfiles 2>/dev/null"
-    scp -qr ~/.packard_dotfiles/[!.]* gilly@sumi:~/.packard_dotfiles/
-    ssh -tAx gilly@sumi "bash --rcfile ~/.packard_dotfiles/bashrc"
-}
-
 ######################################################
 # Vertica Functions
 ######################################################
@@ -216,6 +209,18 @@ function get_buckets() {
 # Get list of instances owned by the qa_server team
 function get_ec2() {
     ~/manage_aws.py ec2-describe -f Team=qa_server
+}
+
+# Dump cluster info across all cloud platforms
+function dump_cloud() {
+    echo -e "\n#######################################################\n"
+    echo -e "#                          AWS                        #"
+    echo -e "\n#######################################################\n"
+    ~/manage_aws.py ec2-describe -f Owner=gpackard --env-file
+    echo -e "\n#######################################################\n"
+    echo -e "#                          GCP                        #"
+    echo -e "\n#######################################################\n"
+    ~/manage_gcp.py gce-describe -f Owner=gpackard --env-file
 }
 
 # Dump GCP cluster info
