@@ -163,6 +163,13 @@ function ide() {
     tmux split-window -v -p 30
 }
 
+function temps() {
+    # First get the session name
+    SESSION_NAME=$(tmux ls | awk '{printf $1}' | tr ':' '\n')
+    # Create new window, split to two panes, and run monitoring commands in each
+    tmux new-window -n temp_monitor \; split-window \; send-keys -t "$SESSION_NAME:temp_monitor.0" "watch -n 2 sensors" ENTER \; send-keys -t "$SESSION_NAME:temp_monitor.1" "watch -n 2 nvidia-smi" ENTER
+}
+
 ######################################################
 # AWS Functions
 ######################################################
