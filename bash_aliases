@@ -18,7 +18,7 @@ alias t='tree -DFhC -L 2'
 
 # Macbook uses G instead of --color
 host=$(hostname)
-if [ "$host" == "Greyjoy" ]; then
+if [ "$host" == "greyjoy" ]; then
 	alias ls='ls -lrtG'
 	alias sl='ls -lrtG'
 	alias la='ls -laG'
