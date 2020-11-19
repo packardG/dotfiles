@@ -47,19 +47,9 @@ function catdir() {
     cd `admintools -t list_db -d "$1" | awk '/^Catalog/{print $3}'`
 }
 
-# Create 'regular' database
+# Create enterprise database
 function pcreate() {
     /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST
-}
-
-# Nimbus create db func.
-function ncreate() {
-    is_cluster_ec2
-    if [ "$?" = 0 ]; then
-        /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot
-    else
-        /opt/vertica/bin/admintools -u -t create_db -d "$1" -s $HOSTLIST --get-aws-credentials-from-env-vars --shard-count="$2" --communal-storage-location=s3://nimbusdb/gpackard/"$1" --depot-path=/scratch_b/qa/"$1"_depot/
-    fi
 }
 
 # Start db
@@ -118,23 +108,6 @@ function dbfunc() {
     done
 }
 
-# Copy binary and catalog directories up to S3
-function s3_upload() {
-    aws s3 cp /opt/vertica/bin/vertica ${1}/binary/
-    dbfunc "find ${2}/*catalog -type d -exec aws s3 cp --recursive {} ${1}{} \;"
-}
-
-# Function for kicking off Nimbus stress tests
-function run_stress() {
-    cd $STRESS_VT
-    nohup ./manage_stress_tests.pl --suite_name "$1" --cluster_hosts $HOSTLIST --failure_behavior=StopPassedDatabases --nimbus &
-}
-
-# Create a 6 node stress cluster without auto-running tests
-function stress_cluster() {
-    /scratch_b/qa/vertica/QA/tools/nimbus/qa_run_nimbus.sh -n 6 -s Stress_VT &
-}
-
 ######################################################
 # Misc. Functions
 ######################################################
@@ -153,10 +126,6 @@ function vtree() {
 # Why did I put this in here....
 function spongebob() {
     echo "$@" | tr -d ' ' | sed 's/\(.\)\(.\)/\u\1 \l\2 /g'
-}
-
-function parse_git_branch() {
-    git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
 
 function ide() {

@@ -15,10 +15,11 @@ alias Nimbus='cd /scratch_b/qa/vertica/QA/tools/nimbus'
 
 # Helpful tools/utils
 alias t='tree -DFhC -L 2'
+alias gst='git status'
 
 # Macbook uses G instead of --color
-host=$(hostname)
-if [ "$host" == "greyjoy" ]; then
+unameOut=$(uname -s)
+if [ "$unameOut" == "Darwin" ]; then
 	alias ls='ls -lrtG'
 	alias sl='ls -lrtG'
 	alias la='ls -laG'

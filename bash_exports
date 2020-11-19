@@ -1,25 +1,7 @@
-# All caps names are aliases of directory paths. Useful for abbreviating scps and stuff.
-export VT_SCENARIO="/scratch_b/qa/vertica/QA/VT_Scenario"
-export STRESS_VT="/scratch_b/qa/vertica/QA/Stress_VT"
-export QAREGRES="/scratch_b/qa/vertica/SQLTest/QARegres"
-export QASTRESS="/scratch_b/qa/vertica/SQLTest/QAstress"
-export SQLTEST="/scratch_b/qa/vertica/SQLTest"
-export SCRATCH="/scratch_b/qa"
-export TOOLS="/scratch_b/qa/vertica/QA/tools"
-export ADMIN_LIB='Admintools'
-export ADMIN_LIB_DIR='/scratch_b/qa/vertica/QA/Stress_VT/lib'
-
 export EMAIL="packard.ben.gilson@microfocus.com"
 export MAILTO="packard.ben.gilson@microfocus.com"
 
 export SVNROOT=svn+ssh://svn/repos
-
-export minio="release@minio-01"
-export miniolb="release@minio-lb"
-export rqadl="release@qadl15"
-export pqadl="gpackard@qadl15"
-export rstress="release@vqastress-01"
-export pstress="gpackard@vqastress-01"
 
 # Normal PATH variables
 export PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/home/gpackard/git/serverfarm/
@@ -27,12 +9,6 @@ export PATH=$PATH:/usr/sbin:/usr/bin:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/
 # Vertica section (v1)
 export PATH=$PATH:/opt/vertica/bin
 export PATH=$PATH:/scratch_b/qa/vertica/QA/VT_Scenario/lib
-
-# AWS credentials set these only locally
-if [[ $(hostname -f) = *verticacorp.com* ]]; then
-    export AWS_ACCESS_KEY_ID=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_access_key_id | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
-    export AWS_SECRET_ACCESS_KEY=$(cat ~/.aws/credentials 2>/dev/null | grep -m1 aws_secret_access_key | awk '{ print $NF}' | sed -e 's/[a-zA-Z_]*\s*=\s*//g' )
-fi
 
 # Cloud stuff
 export OSLOGIN=packard_ben_gilson_microfocus_co

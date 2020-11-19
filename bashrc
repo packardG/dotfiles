@@ -56,6 +56,13 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
+if [ "$color_prompt" = yes ]; then
+    PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;92m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\]: \[$(tput sgr0)\]\[\033[38;5;93m\][\w]\[$(tput sgr0)\]\[\033[38;5;15m\]: \\$ \[$(tput sgr0)\]"
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
@@ -74,15 +81,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -94,21 +92,8 @@ if ! shopt -oq posix; then
   fi
 fi
 
+
+
 source ~/.packard_dotfiles/bash_aliases
 source ~/.packard_dotfiles/bash_exports
 source ~/.packard_dotfiles/bash_func
-
-if [ "$color_prompt" = yes ]; then
-    PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;92m\]@\[$(tput sgr0)\]\[\033[38;5;11m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\]: \[$(tput sgr0)\]\[\033[38;5;93m\][\w]\[$(tput sgr0)\]\[\033[38;5;15m\]:\$(parse_git_branch) \\$ \[$(tput sgr0)\]"
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
-
-
-# Sets $HOSTLIST and $HOSTx variables automatically
-# To add new clusters, add hostlist to the hostlist file and cluster_exports.sh
-eval $(~/.packard_dotfiles/scripts/cluster_exports.sh)
-
-# When you see a USR1 SIG, do nothing
-trap ":" USR1
