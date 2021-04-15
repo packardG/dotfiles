@@ -136,7 +136,7 @@ function dashboard() {
     # First get the session name
     SESSION_NAME=$(tmux ls | awk '{printf $1}' | tr ':' '\n')
     # Create new window, split to three panes, and run monitoring commands in each
-    tmux new-window -n dashboard \; splitw -h \; splitw \; send-keys -t "$SESSION_NAME:dashboard.0" "htop" ENTER \; send-keys -t "$SESSION_NAME:dashboard.1" "watch -n 2 sensors" ENTER \; send-keys -t "$SESSION_NAME:dashboard.2" "watch -n 2 nvidia-smi" ENTER
+    tmux new-window -n dashboard \; splitw -h \; selectp -t 0 \; splitw \; selectp -t 2 \; splitw \; splitw \; send-keys -t "$SESSION_NAME:dashboard.0" "htop" ENTER \; send-keys -t "$SESSION_NAME:dashboard.1" "bwm-ng" ENTER \; send-keys -t "$SESSION_NAME:dashboard.2" "watch -n 2 nvidia-smi" ENTER \; send-keys -t "$SESSION_NAME:dashboard.3" "watch -n 2 sensors" ENTER \; send-keys -t "$SESSION_NAME:dashboard.4" "watch -n 2 free -h" ENTER
 }
 
 ######################################################
