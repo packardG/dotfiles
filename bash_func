@@ -139,6 +139,22 @@ function dashboard() {
     tmux new-window -n dashboard \; splitw -h \; selectp -t 0 \; splitw \; selectp -t 2 \; splitw \; splitw \; send-keys -t "$SESSION_NAME:dashboard.0" "htop" ENTER \; send-keys -t "$SESSION_NAME:dashboard.1" "bwm-ng" ENTER \; send-keys -t "$SESSION_NAME:dashboard.2" "watch -n 2 nvidia-smi" ENTER \; send-keys -t "$SESSION_NAME:dashboard.3" "watch -n 2 sensors" ENTER \; send-keys -t "$SESSION_NAME:dashboard.4" "watch -n 2 free -h" ENTER
 }
 
+function etl_monitor() {
+    # First get session name
+    SESSION_NAME=$(tmux ls | awk '{printf $1}' | tr ':' '\n')
+    # Now get docker container names for the ETL loaders
+    LOADER_IDS=$(ssh etl-user@etl-server.verticacloud.com "docker container ls" | grep 'etl_loader.*' | awk '{print ($NF)}')
+    # Set some vars for loaders 1 - 6 for use in tmux command below
+    LOADER1=$(echo $LOADER_IDS | cut -d ' ' -f 1)
+    LOADER2=$(echo $LOADER_IDS | cut -d ' ' -f 2)
+    LOADER3=$(echo $LOADER_IDS | cut -d ' ' -f 3)
+    LOADER4=$(echo $LOADER_IDS | cut -d ' ' -f 4)
+    LOADER5=$(echo $LOADER_IDS | cut -d ' ' -f 5)
+    LOADER6=$(echo $LOADER_IDS | cut -d ' ' -f 6)
+
+    tmux new-window -n etl_loader_health \; splitw -h \; splitw -v \; splitw -v \; selectp -t 0 \; splitw -v \; splitw -v \; select-layout tiled \; send-keys -t "$SESSION_NAME:etl_loader_health.0" "ssh etl-user@etl-server.verticacloud.com docker logs -f $LOADER1" ENTER \; send-keys -t "$SESSION_NAME:etl_loader_health.1" "ssh etl-user@etl-server.verticacloud.com docker logs -f $LOADER2" ENTER \; send-keys -t "$SESSION_NAME:etl_loader_health.2" "ssh etl-user@etl-server.verticacloud.com docker logs -f $LOADER3" ENTER \; send-keys -t "$SESSION_NAME:etl_loader_health.3" "ssh etl-user@etl-server.verticacloud.com docker logs -f $LOADER4" ENTER \; send-keys -t "$SESSION_NAME:etl_loader_health.4" "ssh etl-user@etl-server.verticacloud.com docker logs -f $LOADER5" ENTER \; send-keys -t "$SESSION_NAME:etl_loader_health.5" "ssh etl-user@etl-server.verticacloud.com docker logs -f $LOADER6" ENTER
+}
+
 ######################################################
 # AWS Functions
 ######################################################
